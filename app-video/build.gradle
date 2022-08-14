@@ -1,0 +1,21 @@
+apply from: '../app.gradle'
+android {
+    resourcePrefix 'video_'
+
+    defaultConfig {
+        if (!isRelease) {
+            applicationId "com.example.app_video"
+            versionCode 1
+            versionName "1.0"
+        }
+    }
+}
+
+dependencies {
+/**
+ * 此模块单独配置的库
+ */
+
+    implementation project(':app-base')
+
+}

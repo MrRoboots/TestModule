@@ -1,0 +1,57 @@
+/**
+ * 统一配置gradle文件
+ * 其他模块需要单独配置的到相关模块进行配置
+ */
+
+plugins.apply('org.jetbrains.kotlin.android')
+
+if (isRelease) {
+    plugins.apply('com.android.library')
+} else {
+    plugins.apply('com.android.application')
+}
+
+android {
+    compileSdk rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main {
+            //设置正式版AndroidManifest
+            if (isRelease) {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                //过滤目录
+                java.exclude '**/debug/**'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifestDebug.xml'
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation androidx.appcompat
+    implementation androidx.constraintlayout
+    testImplementation androidx.junit
+    androidTestImplementation androidx.testJunst
+    androidTestImplementation androidx.espressoCore
+}
